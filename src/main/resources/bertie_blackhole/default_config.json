@@ -1,0 +1,66 @@
+{
+  "_readme": [
+    "Bertie Black Hole - config/bertie_blackhole.json",
+    "",
+    "The hole's own pull does the collecting. The moment an item reaches the centre - the exact",
+    "point where F&A would have destroyed it - it is sorted into one of three buckets: a counter,",
+    "an exchange input, or unlisted. There is no separate scan and no radius of our own.",
+    "",
+    "counters   Named, so several items can feed the same one with different weights. A level's",
+    "           'requires' block is what has to be FULL to reach that level, so the level-1 entry",
+    "           is what a brand new hole is collecting. When every counter is full the hole",
+    "           transforms: sound plays, particles and aura take the new colour, counters reset,",
+    "           and the level's exchanges come online.",
+    "acceptOverCap  false = a full counter ignores that item completely - not absorbed, not moved,",
+    "               not destroyed. It just hangs there. true keeps absorbing past max.",
+    "eatUnlisted    false = anything the hole has no use for is left alone. true restores vanilla",
+    "               F&A behaviour and voids it.",
+    "exchanges  Cumulative - a level 2 hole still offers the level 1 conversions. Inputs bank up",
+    "           in a buffer; the first output lands firstOutputDelayTicks after the buffer first",
+    "           covers the cost, each further one subsequentOutputDelayTicks later, and whatever",
+    "           does not divide evenly stays banked.",
+    "",
+    "Items are written as ids, or as tags with a leading # (\"#c:raw_materials\").",
+    "particleColor is hex; drop it or set it to null to keep the vanilla purple.",
+    "Note that #forbidden_arcanus:black_hole_unaffected items are never pulled in by F&A in the",
+    "first place, so they can never reach a counter. Take an item off that tag with a datapack if",
+    "you want the hole to eat it.",
+    "",
+    "Base black hole behaviour is untouched: it still pulls from 5 blocks, still turns 60 XP into",
+    "an Xpetrified Orb, and still burns arrows and other affected entities."
+  ],
+
+  "firstOutputDelayTicks": 60,
+  "subsequentOutputDelayTicks": 20,
+  "acceptOverCap": false,
+  "eatUnlisted": false,
+
+  "levels": [
+    {
+      "level": 1,
+      "requires": {
+        "matter": {
+          "max": 64,
+          "items": {
+            "forbidden_arcanus:dark_matter": 1
+          }
+        }
+      },
+      "_sound_note": "placeholder. deep but quiet alternatives: entity.warden.emerge, entity.ender_dragon.growl",
+      "sound": "minecraft:block.end_portal.spawn",
+      "soundVolume": 2.0,
+      "soundPitch": 0.7,
+      "particleColor": "#D01818",
+      "particleShadeJitter": 0.45,
+      "exchanges": [
+        {
+          "id": "eternal_stella",
+          "input": "forbidden_arcanus:xpetrified_orb",
+          "count": 8,
+          "output": "forbidden_arcanus:eternal_stella",
+          "outputCount": 1
+        }
+      ]
+    }
+  ]
+}

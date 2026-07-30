@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.berlord.bertieblackhole.mixin",
+  "plugin": "com.berlord.bertieblackhole.mixin.BbhMixinPlugin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "BlackHoleBlockEntityMixin"
+  ],
+  "client": [
+    "BlackHoleBlockMixin",
+    "BlackHoleRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
