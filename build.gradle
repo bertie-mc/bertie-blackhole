@@ -10,6 +10,7 @@ group = mod_group_id
 repositories {
     mavenLocal()
     mavenCentral()
+    maven { url = "https://api.modrinth.com/maven" }
 }
 
 base {
@@ -51,7 +52,9 @@ dependencies {
     // refuses to apply when it is absent (see BbhMixinPlugin). It is on the compile
     // classpath only so the mixins can name BlackHoleBlockEntity / BlackHoleRenderer as
     // real types instead of going through string targets and @Coerce.
-    compileOnly files("libs/${fa_jar}")
+    // Resolved from the Modrinth maven so the build is reproducible off this machine.
+    // A local libs/ jar is gitignored and made CI impossible.
+    compileOnly "maven.modrinth:forbidden-arcanus:2.6.1"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
