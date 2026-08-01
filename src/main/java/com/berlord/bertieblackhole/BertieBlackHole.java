@@ -16,16 +16,11 @@ public class BertieBlackHole {
     public static final String MOD_ID = "bertie_blackhole";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public BertieBlackHole(IEventBus modEventBus) {
+    public BertieBlackHole(IEventBus ignored) {
         NeoForge.EVENT_BUS.addListener(BertieBlackHole::onServerStarting);
         NeoForge.EVENT_BUS.addListener(BertieBlackHole::onRegisterCommands);
     }
 
-    /**
-     * Re-read the file on every world load so tuning a test build is a quit-and-rejoin rather
-     * than a full restart. In singleplayer the integrated server shares this JVM, so the client
-     * side picks the new colours up at the same moment.
-     */
     private static void onServerStarting(ServerStartingEvent event) {
         BbhConfig.reload();
     }

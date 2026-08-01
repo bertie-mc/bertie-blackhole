@@ -5,9 +5,7 @@
   "plugin": "com.berlord.bertieblackhole.mixin.BbhMixinPlugin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "BlackHoleBlockEntityMixin"
-  ],
-  "client": [
+    "BlackHoleBlockEntityMixin",
     "BlackHoleBlockMixin",
     "BlackHoleRendererMixin"
   ],

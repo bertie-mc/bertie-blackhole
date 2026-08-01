@@ -130,5 +130,11 @@ Everything here is injected into F&A internals, so an F&A update can move the gr
 than silently doing nothing. `BbhMixinPlugin` disables the whole config when F&A is absent, so the
 jar is inert rather than fatal in a build that drops F&A.
 
-`libs/forbidden_arcanus-2.6.1.jar` is `compileOnly` — needed to build, never shipped. Update the
-`fa_jar` property in `gradle.properties` when the pack moves to a new F&A.
+F&A is a `compileOnly` dependency resolved from Modrinth; it is needed to compile the mixins but is
+never bundled.
+
+## Tests
+
+`gradle test` covers config parsing, validation, cumulative exchanges, and NBT persistence.
+`gradle clientTestJar` builds a test-only mod that verifies every F&A mixin target in a headless
+client; it is excluded from releases.

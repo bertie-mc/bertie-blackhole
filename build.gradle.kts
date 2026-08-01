@@ -1,4 +1,6 @@
 import org.gradle.language.jvm.tasks.ProcessResources
+import org.gradle.api.tasks.testing.Test
+import org.gradle.jvm.tasks.Jar
 
 plugins {
     `java-library`
@@ -36,6 +38,8 @@ base {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
+val clientTest = sourceSets.create("clientTest")
+
 neoForge {
     version = neo_version
 
@@ -62,16 +66,38 @@ neoForge {
             sourceSet(sourceSets.main.get())
         }
     }
+
+    addModdingDependenciesTo(clientTest)
+
+    unitTest {
+        enable()
+        testedMod = mods.getByName(mod_id)
+    }
+}
+
+clientTest.compileClasspath += sourceSets.main.get().output
+clientTest.runtimeClasspath += sourceSets.main.get().output
+
+tasks.register<Jar>("clientTestJar") {
+    group = "verification"
+    description = "Build the test-only mod used by the headless client suite"
+    archiveFileName = "bertie-blackhole-client-tests.jar"
+    destinationDirectory = layout.buildDirectory.dir("test-libs")
+    from(clientTest.output)
+    dependsOn(tasks.named(clientTest.classesTaskName))
 }
 
 dependencies {
-    // Forbidden and Arcanus is a soft dependency: we never ship it and the mixin config
-    // refuses to apply when it is absent (see BbhMixinPlugin). It is on the compile
-    // classpath only so the mixins can name BlackHoleBlockEntity / BlackHoleRenderer as
-    // real types instead of going through string targets and @Coerce.
-    // Resolved from the Modrinth maven so the build is reproducible off this machine.
-    // A local libs/ jar is gitignored and made CI impossible.
+    // The mixin plugin keeps the mod inert when this soft dependency is absent.
     compileOnly("maven.modrinth:forbidden-arcanus:2.6.1")
+
+    testImplementation(platform("org.junit:junit-bom:6.1.2"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.named<Test>("test") {
+    useJUnitPlatform()
 }
 
 val generateModMetadata = tasks.register<ProcessResources>("generateModMetadata") {
